@@ -40,7 +40,7 @@ type DocumentFFI struct {
 
 //Obj-C FFI forces single return value
 type DocumentVerifyOutput struct {
-	Measurement 			attestation.Measurement
+	Measurement 			*MeasurementFFI
 	CertificateFingerPrint []byte
 }
 
@@ -50,7 +50,12 @@ func (d* DocumentFFI) Verify() (*DocumentVerifyOutput, error) {
 		return nil, fmt.Errorf("failed to verify document: %v", err)
 	}
 
-	return &DocumentVerifyOutput{*measurement, cfp}, nil
+	measurementFFI := &MeasurementFFI{
+		string(measurement.Type),
+		measurement.Registers,
+	}
+
+	return &DocumentVerifyOutput{measurementFFI, cfp}, nil
 }
 
 //we just need equatable
