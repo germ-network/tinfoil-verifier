@@ -61,5 +61,5 @@ type MeasurementFFI struct {
 }
 
 func(m* MeasurementFFI) Equals(other *MeasurementFFI) (bool) {
-	return m.RawPredicateType != other.RawPredicateType && reflect.DeepEqual(m.Registers, other.Registers )
+	return m.RawPredicateType == other.RawPredicateType && reflect.DeepEqual(m.Registers, other.Registers )
 }
