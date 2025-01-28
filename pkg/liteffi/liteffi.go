@@ -33,19 +33,15 @@ func FetchTrustRootFFI() ([]byte, error) {
 	return sigstore.FetchTrustRoot()
 }
 
-//hacky way to re-export
-type DocumentFFI struct {
-	Inner attestation.Document
-}
-
 //Obj-C FFI forces single return value
 type DocumentVerifyOutput struct {
 	Measurement 			*MeasurementFFI
 	CertificateFingerPrint []byte
 }
 
-func (d* DocumentFFI) Verify() (*DocumentVerifyOutput, error) {
-	measurement, cfp, err := d.Inner.Verify()
+func VerifyDocument(documentFormat, body string) (*DocumentVerifyOutput, error) {
+	inner := &attestation.Document{ attestation.PredicateType(documentFormat), body }
+	measurement, cfp, err := inner.Verify()
 	if err != nil {
 		return nil, fmt.Errorf("failed to verify document: %v", err)
 	}
